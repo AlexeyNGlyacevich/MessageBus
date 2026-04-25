@@ -21,10 +21,10 @@ namespace MessageBusExample
             ShutdownMode = ShutdownMode.OnMainWindowClose;
 
             _hosting = Host.CreateApplicationBuilder()
-                .ConfigureApplication()
                 .ConfigureCore()
                 .ConfigureInfrastructure()
                 .ConfigureUI()
+                .ConfigureApplication()
                 .Build();
 
             // Логирование ошибок UI

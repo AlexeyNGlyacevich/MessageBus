@@ -4,9 +4,85 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessageBusExample.Views"
+        xmlns:logEntry="clr-namespace:MessageBusExample.Models.LogModels"
         mc:Ignorable="d"
+        d:DataContext="{}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition MinHeight="40" 
+                           Height="100"/>
+        </Grid.RowDefinitions>
+
+        <GridSplitter Grid.Row="1" 
+                      Background="Gray"
+                      Height="1"
+                      Margin="1 0"
+                      ShowsPreview="True"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"/>
+
+        <Border x:Name="LogMessageBorder"
+                Grid.Row="2"
+                Margin="10"
+                BorderBrush="Gray"
+                BorderThickness="1">
+
+            <ScrollViewer x:Name="LogsScrollViewr"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Logs}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical"
+                                                    IsItemsHost="True" />
+
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type logEntry:UILogEntry }">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Timestamp }" 
+                                           Foreground="DarkRed"
+                                           Margin="10 0"/>
+                                <TextBlock Text="{Binding Level }" 
+                                           Foreground="Black"
+                                           Margin="5 0"/>
+                                <TextBlock Text="{Binding Message }"
+                                           Foreground="Black"
+                                           Margin="5 0" />
+                                <TextBlock Text="{Binding Source }"
+                                           Foreground="Black"
+                                           Margin="5 0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <Button Width="auto"
+                MinWidth="50"
+                Height="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10"
+                Padding="10"
+                Command="{Binding SendLogMessageCommand}"
+                Content="Проверка срабатывания логирования"/>
+
+        <Button Width="auto"
+                MinWidth="50"
+                Height="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10 70 0 0" 
+                Padding="10"
+                Content="Открыть дополнительное окно"/>
     </Grid>
 </Window>

@@ -1,8 +1,8 @@
-﻿using MessageBusExample.ViewModels;
+﻿using MessageBusExample.Services;
+using MessageBusExample.ViewModels;
 using MessageBusExample.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace MessageBusExample.Common
@@ -12,13 +12,13 @@ namespace MessageBusExample.Common
         public static HostApplicationBuilder ConfigureApplication(this HostApplicationBuilder builder)
         {
             // SerilogConfiguration
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
-                .CreateLogger();
-
-
-            builder.Logging.ClearProviders();
-            builder.Logging.AddSerilog(Log.Logger);
+            builder.Services.AddSerilog((services, lc) =>
+            {
+                lc.ReadFrom.Configuration(builder.Configuration)
+                  .ReadFrom.Services(services)
+                  .Enrich.FromLogContext()
+                  .WriteTo.Sink(services.GetRequiredService<UILogSink>());
+            });
 
             return builder;
         }
@@ -29,6 +29,11 @@ namespace MessageBusExample.Common
             // Services, Logic, etc.
 
             var services = builder.Services;
+
+            services.AddSingleton<UILogStore>();
+            services.AddSingleton<UILogSink>();
+
+            services.AddSingleton<ChannelMessageBus>();
 
             return builder;
         }

@@ -14,5 +14,6 @@ namespace MessageBusExample.Views
 
             DataContext = vm;
         }
+
     }
 }
