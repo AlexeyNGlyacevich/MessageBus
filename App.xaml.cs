@@ -1,4 +1,5 @@
 ﻿using MessageBusExample.Common;
+using MessageBusExample.Services;
 using MessageBusExample.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,8 @@ namespace MessageBusExample
     public partial class App : Application
     {
         private IHost? _hosting;
+
+        private readonly CancellationTokenSource _ctx = new();
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -32,6 +35,10 @@ namespace MessageBusExample
 
             await _hosting.StartAsync();
 
+            // Стартует ChannelMessageBus.
+            var messageBus = _hosting.Services.GetRequiredService<ChannelMessageBus>();
+
+            _ = Task.Run(() => messageBus.StartAsync(_ctx.Token));
 
             var mainWindow = _hosting.Services.GetRequiredService<MainWindow>();
 
@@ -45,6 +52,9 @@ namespace MessageBusExample
         {
             if (_hosting is not null)
             {
+                // Остановить работу CannelMessageBus.
+                _ctx.Cancel();
+
                 await _hosting.StopAsync();
                 _hosting.Dispose();
             }

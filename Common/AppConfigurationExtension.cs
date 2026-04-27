@@ -1,4 +1,5 @@
-﻿using MessageBusExample.Services;
+﻿using MessageBusExample.Abstractions.Windows;
+using MessageBusExample.Services;
 using MessageBusExample.ViewModels;
 using MessageBusExample.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,7 @@ namespace MessageBusExample.Common
             services.AddSingleton<UILogSink>();
 
             services.AddSingleton<ChannelMessageBus>();
+            services.AddSingleton<IWindowsFactory, WindowsFactory>();
 
             return builder;
         }
@@ -51,9 +53,11 @@ namespace MessageBusExample.Common
 
             // UI, Views.
             services.AddSingleton<MainWindow>();
+            services.AddTransient<DialogMessageView>();
 
             // .. ViewModels.
             services.AddSingleton<MainWindowViewModel>();
+            services.AddTransient<MessageViewModel>();
 
 
             return builder;

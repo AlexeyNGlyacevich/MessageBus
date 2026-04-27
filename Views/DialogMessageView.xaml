@@ -1,0 +1,21 @@
+﻿<Window x:Class="MessageBusExample.Views.DialogMessageView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MessageBusExample.Views"
+        mc:Ignorable="d"
+        Title="DialogMessageView" Height="450" Width="600">
+    <Grid>
+        <Button Width="auto"
+                MinWidth="50"
+                Height="50"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Padding="10 0"
+                Content="Кнопка сообщения для Главного окна"
+                Command="{Binding SendMessageToMainVMCommand}">
+        </Button>
+
+    </Grid>
+</Window>

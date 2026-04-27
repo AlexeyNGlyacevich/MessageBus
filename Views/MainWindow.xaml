@@ -83,6 +83,7 @@
                 VerticalAlignment="Top"
                 Margin="10 70 0 0" 
                 Padding="10"
+                Command="{Binding ActivateDependentViewCommand}"
                 Content="Открыть дополнительное окно"/>
     </Grid>
 </Window>
