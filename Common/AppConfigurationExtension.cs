@@ -54,10 +54,12 @@ namespace MessageBusExample.Common
             // UI, Views.
             services.AddSingleton<MainWindow>();
             services.AddTransient<DialogMessageView>();
+            services.AddTransient<AditionalMessageView>();
 
             // .. ViewModels.
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<MessageViewModel>();
+            services.AddTransient<AditionalViewModel>();
 
 
             return builder;

@@ -6,7 +6,6 @@ using MessageBusExample.Services;
 using MessageBusExample.Views;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
 
 namespace MessageBusExample.ViewModels
 {
@@ -18,9 +17,10 @@ namespace MessageBusExample.ViewModels
 
         private readonly IWindowsFactory _factory;
 
-        private readonly Object _lock = new();
+        private readonly UILogStore _store;
+
         
-        public ObservableCollection<UILogEntry> Logs { get; }
+        public ObservableCollection<UILogEntry> Logs => _store.Logs;
 
         public MainWindowViewModel(ILogger<MainWindowViewModel> logger, ChannelMessageBus bus, UILogStore store, IWindowsFactory factory)
         {
@@ -30,9 +30,7 @@ namespace MessageBusExample.ViewModels
 
             _factory = factory;
 
-            Logs = store.Logs;
-
-            BindingOperations.EnableCollectionSynchronization(Logs, _lock);
+            _store = store;
 
             _logger.LogInformation("Main Window Started");
 

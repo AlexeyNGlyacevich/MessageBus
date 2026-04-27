@@ -95,30 +95,31 @@ namespace MessageBusExample.Services
             await semaphore.WaitAsync();
             try
             {
-                // 1. snapshot under lock
+                // 1. snapshot
                 lock (list)
                 {
                     snapshot = list.ToList();
                 }
 
-                // 2. filtering + execution planning
+                // 2. фильтрация
                 foreach (var sub in snapshot)
                 {
-                    if (sub.TryGetTarget(out _))
-                    {
-                        bool matchesTarget =
-                            routed.TargetType == null ||
-                            sub.SubscriberType == routed.TargetType;
+                    if (!sub.TryGetTarget(out var target))
+                        continue;
 
-                        if (matchesTarget)
-                        {
-                            alive.Add(sub);
-                            tasks.Add(SafeInvoke(sub, routed.Message));
-                        }
+                    alive.Add(sub);
+
+                    bool matchesTarget =
+                        routed.TargetType == null ||
+                        routed.TargetType.IsAssignableFrom(sub.SubscriberType);
+
+                    if (matchesTarget)
+                    {
+                        tasks.Add(SafeInvoke(sub, routed.Message));
                     }
                 }
 
-                // 3. cleanup under lock
+                // 3. cleanup — только мёртвых убираем
                 lock (list)
                 {
                     list.Clear();
@@ -130,7 +131,7 @@ namespace MessageBusExample.Services
                 semaphore.Release();
             }
 
-            // 4. execution outside lock (VERY IMPORTANT)
+            // 4. выполнение вне lock
             if (tasks.Count > 0)
             {
                 try
@@ -139,7 +140,7 @@ namespace MessageBusExample.Services
                 }
                 catch
                 {
-                    // optional logging
+                    // логирование по желанию
                 }
             }
         }

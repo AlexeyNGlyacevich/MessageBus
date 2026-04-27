@@ -4,18 +4,73 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MessageBusExample.Views"
+        xmlns:log="clr-namespace:MessageBusExample.Models.LogModels"
         mc:Ignorable="d"
         Title="DialogMessageView" Height="450" Width="600">
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition MinHeight="50" 
+                           Height="100"/>
+        </Grid.RowDefinitions>
+        
+        
         <Button Width="auto"
                 MinWidth="50"
                 Height="50"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10"
                 Padding="10 0"
                 Content="Кнопка сообщения для Главного окна"
                 Command="{Binding SendMessageToMainVMCommand}">
         </Button>
+
+        <Button Width="auto"
+                x:Name="NextView"
+                MinWidth="50"
+                Height="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10 70"
+                Padding="10 0"
+                Content="Открыть еще одно доп. Окно"
+                Command="{Binding ShowAdditionalWindowCommand}">
+        </Button>
+
+
+        <ListView x:Name="MessagesListView" 
+                  ItemsSource="{Binding Messages}"
+                  Grid.Row="1"
+                  Margin="10">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type log:UILogEntry }">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Timestamp }"
+                                   Foreground="DarkRed"
+                                   Margin="10 0" />
+                        <TextBlock Text="{Binding Level }"
+                                   Foreground="Black"
+                                   Margin="5 0" />
+                        <TextBlock Text="{Binding Message }"
+                                   Foreground="Black"
+                                   Margin="5 0" />
+                        <TextBlock Text="{Binding Source }"
+                                   Foreground="Black"
+                                   Margin="5 0" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
 </Window>
