@@ -58,7 +58,7 @@ namespace MessageBusExample.ViewModels
                     Timestamp = DateTime.UtcNow,
                     Level = LogLevel.Debug.ToString(),
                     Message = msg.Text,
-                    Source = "VM"
+                    Source = msg.Source
             });
         }
     }

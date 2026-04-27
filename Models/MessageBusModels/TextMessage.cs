@@ -2,7 +2,7 @@
 
 namespace MessageBusExample.Models.MessageBusModels
 {
-    public sealed record TextMessage(string Text, string Source) : IMessage
+    public sealed record TextMessage(string Text, string? Source = null) : IMessage
     {
     }
 }
